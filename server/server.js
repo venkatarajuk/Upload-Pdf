@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// cloudinary configurations
 cloudinary.config({
   cloud_name: "dgzbpko6w",
   api_key: "972859984146584",
@@ -17,12 +18,14 @@ cloudinary.config({
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+// database conncetion
 const sequelize = new Sequelize("sys", "root", "raju@8790", {
   dialect: "mysql",
   host: "127.0.0.1",
   logging: false,
 });
 
+// model
 const Pdf = sequelize.define("Pdf", {
   pdfUrl: {
     type: DataTypes.JSON,
@@ -50,6 +53,8 @@ sequelize
   .catch((error) => {
     console.error("Error creating table:", error);
   });
+
+//upload file
 
 app.post("/upload-files", upload.array("files"), async (req, res) => {
   try {
@@ -97,6 +102,8 @@ app.post("/upload-files", upload.array("files"), async (req, res) => {
     res.status(500).json({ status: "error", message: "Internal Server Error" });
   }
 });
+
+// get pdf file
 
 app.get("/pdf-files", async (req, res) => {
   try {
